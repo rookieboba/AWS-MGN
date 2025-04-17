@@ -38,7 +38,9 @@ CloudShell에서의 초기 세팅부터 리눅스 서버에서의 agent 설치, 
 ## ☁️ CloudShell 초기 작업 (최초 1회)
 
 ```bash
-cd cloudshell
+# GitHub에서 레포지토리 클론
+git clone https://github.com/rookieboba/rocky-to-aws-mgn-main.git
+cd rocky-to-aws-mgn-main/cloudshell
 
 # .env 에 사용자 설정
 
@@ -50,18 +52,10 @@ aws iam attach-user-policy \
   --user-name "$IAM_USER" \
   --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
 
-# 키페어 생성 (대비)
-aws ec2 create-key-pair \
-  --key-name "$KEY_NAME" \
-  --query 'KeyMaterial' \
-  --output text > "${KEY_NAME}.pem"
-
-chmod 400 "${KEY_NAME}.pem"
-
 # CloudFormation 스택 생성
 aws cloudformation create-stack \
   --stack-name "$STACK_NAME" \
-  --template-body file://mgn_setup.yaml \
+  --template-body file://mgn_setup_updated.yaml \
   --capabilities CAPABILITY_NAMED_IAM \
   --region "$AWS_REGION"
 
