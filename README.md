@@ -93,14 +93,42 @@ sudo wget -O ./aws-replication-installer-init https://aws-application-migration-
 chmod +x aws-replication-installer-init
 ./aws-replication-installer-init --region "$AWS_REGION" --no-prompt
 
-#2. 소스 서버 확인 및 ID 등록
-aws mgn describe-source-servers --region "$AWS_REGION" --output table
-aws mgn describe-source-servers
-
-source_server_id=$(aws mgn describe-source-servers \
+# 2. 소스 서버 ID 변수에 저장
+SOURCE_ID=$(aws mgn describe-source-servers \
   --region ap-northeast-2 \
-  --query "items[*].sourceServerID" \
+  --query "items[0].sourceServerID" \
   --output text)
+echo "Source Server ID: $SOURCE_ID"
+
+# 3. 복제 시작
+aws mgn start-replication \
+  --region ap-northeast-2 \
+  --source-server-id "$source_server_id"
+echo "[✔] Replication started for $SOURCE_ID"
+
+# 4. [검증] 테스트 인스턴스 실행
+aws mgn launch-test-instance \
+  --region ap-northeast-2 \
+  --source-server-id "$SOURCE_ID"
+echo "[✔] Test instance launched"
+
+aws mgn describe-source-servers \
+  --region ap-northeast-2 \
+  --query "items[?sourceServerID=='$SOURCE_ID'].lifeCycle.state" \
+  --output text
+
+5. [운영 전환] 최종 마이그레이션 인스턴스 실행
+aws mgn launch-cutover-instance \
+  --region ap-northeast-2 \
+  --source-server-id "$SOURCE_ID"
+echo "[✔] Cutover instance launched"
+
+6. [완료] 마이그레이션 확정 (Finalize)
+aws mgn finalize-cutover \
+  --region ap-northeast-2 \
+  --source-server-id "$SOURCE_ID"
+echo "[✔] Migration finalized"
+
 ```
 
 
