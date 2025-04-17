@@ -31,7 +31,6 @@ CloudShell에서의 초기 세팅부터 리눅스 서버에서의 agent 설치, 
 
 - AWS 계정 및 CloudShell 접근 권한
 - VMware 또는 기타 환경의 **Rocky Linux 8.10 서버 (인터넷 연결 필수)**
-- 해당 서버에 `awscli`, `jq`, `curl` 설치됨
 - IAM 사용자 권한: AdministratorAccess 또는 MGN 관련 최소 권한
 
 ---
@@ -44,18 +43,30 @@ cd cloudshell
 # .env 에 사용자 설정
 
 # IAM 사용자 및 키 발급
-chmod +x create_iam_user_with_keys.sh
-./create_iam_user_with_keys.sh "$IAM_USER"
+aws iam create-user --user-name "$IAM_USER"
 
-# 키페어 생성
-chmod +x create_key.sh
-./create_key.sh "$KEY_NAME"
+# IAM 사용자에 권한 부여 (AdministratorAccess 또는 최소 권한 정책 ARN)
+aws iam attach-user-policy \
+  --user-name "$IAM_USER" \
+  --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
+
+# 키페어 생성 (대비)
+aws ec2 create-key-pair \
+  --key-name "$KEY_NAME" \
+  --query 'KeyMaterial' \
+  --output text > "${KEY_NAME}.pem"
+
+chmod 400 "${KEY_NAME}.pem"
 
 # CloudFormation 스택 생성
-chmod +x create_stack.sh
-./create_stack.sh "$STACK_NAME"
+aws cloudformation create-stack \
+  --stack-name "$STACK_NAME" \
+  --template-body file://mgn_setup.yaml \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --region "$AWS_REGION"
 
-# 키 발급 및 저장
+
+# IAM 사용자 액세스 키 발급 및 저장
 aws iam create-access-key --user-name "$IAM_USER" \
   | jq -r '.AccessKey | "aws_access_key_id=\\(.AccessKeyId)\\naws_secret_access_key=\\(.SecretAccessKey)"' \
   > mgn-access-keys.txt
