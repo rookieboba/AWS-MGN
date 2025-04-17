@@ -32,12 +32,15 @@ cd AWS-MGN/cloudshell
 ```bash
 chmod +x create_key.sh
 ./create_key.sh mgn-key
+aws ec2 describe-key-pairs
 ```
 
 ### 3. CloudFormation 스택 생성 (IAM Role, VPC, Subnet, SG 구성 포함)
 ```bash
 chmod +x create_stack.sh
 ./create_stack.sh mgn-setup-stack
+aws cloudformation list-stacks
+# aws cloudformation list-stacks --stack-name mgn-setup-stack
 ```
 
 ### 4. MGN용 IAM 사용자 생성 및 AccessKey 출력
