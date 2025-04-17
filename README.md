@@ -11,8 +11,28 @@
 
 ---
 
-## ☁️ CloudShell 작업 흐름
+## ☁️ 작업 흐름
 
+[1단계] CloudShell / IAM 사용자 생성 및 액세스 키 발급
+```bash
+# CloudShell
+alias mgnuser='mgn-rocky-user'
+aws iam list-access-keys --user-name $mgnuser --output table
+aws iam create-user --user-name $mgnuser
+aws iam create-access-key --user-name  $mgnuser \
+  | jq -r '.AccessKey | "AWS_ACCESS_KEY_ID=\(.AccessKeyId)\nAWS_SECRET_ACCESS_KEY=\(.SecretAccessKey)"' \
+  > mgn-access-keys.txt
+```
+
+[2단계] Putty / 환경 변수 등록 (Access Key + Secret Key + Region)
+```bash
+# 가상 서버에서 아래 작업 진행
+cat mgn-access-keys.txt >> ~/.bashrc
+export AWS_REGION=ap-northeast-2
+source ~/.bashrc
+```
+
+[3단계] AWS 스택 생성 
 ```bash
 # 1. 레포지토리 클론
 git clone https://github.com/rookieboba/AWS-MGN.git
@@ -36,26 +56,12 @@ chmod +x create_iam_user_with_keys.sh
 ./create_iam_user_with_keys.sh {user-name}
 #./create_iam_user_with_keys.sh mgn-rocky-user
 
-# 5. Key 조회
-cat *-credentials.txt
-#export AWS_ACCESS_KEY_ID=\(.AccessKey.AccessKeyId)
-#export AWS_SECRET_ACCESS_KEY=\(.AccessKey.SecretAccessKey)
-```
-
----
-
-## 🖥️ Rocky Linux에서 수행할 작업
-
-```bash
-# 1. 환경 변수 등록 (*-credentials.txt 확인. CloudShell에서 발급받은 값 사용)
-export AWS_ACCESS_KEY_ID=AKIAxxxxxxxxxxxx
-export AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxx
-export AWS_REGION=ap-northeast-2
-
+# 5. Migration 시작
 sudo wget -O ./aws-replication-installer-init https://aws-application-migration-service-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/linux/aws-replication-installer-init
 chmod +x aws-replication-installer-init
 ./aws-replication-installer-init --region "$AWS_REGION" --no-prompt
 ```
+
 
 ## ☁️ CloudShell 작업 흐름
 
