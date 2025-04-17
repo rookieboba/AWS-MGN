@@ -97,6 +97,22 @@ aws cloudformation delete-stack --stack-name mgn-setup-stack
 
 # 키페어 삭제
 aws ec2 delete-key-pair --key-name mgn-key
+
+# access key 삭제
+aws iam list-access-keys --user-name mgn-rocky-user \
+  --query 'AccessKeyMetadata[*].AccessKeyId' \
+  --output text | xargs -n1 -I{} aws iam delete-access-key --user-name mgn-rocky-user --access-key-id {}
+
+# 연결된 정책 분리
+aws iam list-attached-user-policies --user-name mgn-rocky-user \
+  --query 'AttachedPolicies[*].PolicyArn' \
+  --output text | xargs -n1 -I{} aws iam detach-user-policy --user-name mgn-rocky-user --policy-arn {}
+
+# 사용자 삭제
+aws iam delete-user --user-name mgn-rocky-user
+aws iam get-user --user-name mgn-rocky-user
+# 결과 확인
+
 ```
 
 
