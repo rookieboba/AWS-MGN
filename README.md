@@ -8,7 +8,6 @@
 ## 📁 디렉토리 설명
 
 - `cloudshell/` - AWS 리소스 생성용 스크립트 (VPC, Subnet, IAM 등)
-- `rocky/` - 온프레미스 서버(Rocky Linux)에서 실행할 에이전트 설치용 스크립트
 
 ---
 
