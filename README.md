@@ -1,3 +1,5 @@
+cloudshell 이용 자동화 및 간단한 실습이 목표
+
 # 1. GitHub에서 클론
 
 ```bash
