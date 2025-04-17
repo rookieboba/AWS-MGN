@@ -93,10 +93,13 @@ chmod +x install_mgn_agent.sh
 
 ```bash
 # 스택 삭제
-aws cloudformation delete-stack --stack-name mgn-setup-stack
+aws cloudformation delete-stack --stack-name {stack-name}
+# aws cloudformation delete-stack --stack-name mgn-setup-stack
+
 
 # 키페어 삭제
-aws ec2 delete-key-pair --key-name mgn-key
+aws ec2 delete-key-pair --key-name {key-name}
+# aws ec2 delete-key-pair --key-name mgn-key
 
 # Access Key 삭제 (수정된 xargs)
 aws iam list-access-keys --user-name mgn-rocky-user \
