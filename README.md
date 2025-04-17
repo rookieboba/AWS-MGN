@@ -53,11 +53,9 @@ export AWS_ACCESS_KEY_ID=AKIAxxxxxxxxxxxx
 export AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxx
 export AWS_REGION=ap-northeast-2
 
-# 2. 스크립트 실행
-git clone https://github.com/rookieboba/AWS-MGN.git
-cd AWS-MGN/rocky
-chmod +x install_mgn_agent.sh
-./install_mgn_agent.sh
+sudo wget -O ./aws-replication-installer-init https://aws-application-migration-service-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/linux/aws-replication-installer-init
+chmod +x aws-replication-installer-init
+./aws-replication-installer-init --region "$AWS_REGION" --no-prompt
 ```
 
 ---
