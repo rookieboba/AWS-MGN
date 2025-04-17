@@ -72,8 +72,9 @@ aws cloudformation delete-stack --stack-name mgn-setup-stack
 aws ec2 delete-key-pair --key-name mgn-key
 
 # IAM Access Key 및 사용자 삭제
-chmod +x ../cleanup/delete_iam_user.sh
-../cleanup/delete_iam_user.sh mgn-rocky-user
+chmod +x ./cloudshell/delete_iam_user.sh
+sh -x ./cloudshell/delete_iam_user.sh {user-name}
+# sh -x ./cloudshell/delete_iam_user.sh mgn-rocky-user
 ```
 
 ---
