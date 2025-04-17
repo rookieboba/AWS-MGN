@@ -1,10 +1,17 @@
 #!/bin/bash
 set -e
 
-IAM_USER_NAME="mgn-rocky-user"
-OUTPUT_FILE="mgn-iam-user-credentials.txt"
+# 사용자 이름 인자를 받지 않았을 경우 예외 처리
+if [ -z "$1" ]; then
+  echo "[ERROR] IAM 사용자 이름을 인자로 입력하세요."
+  echo "예: ./create_iam_user_with_keys.sh mgn-rocky-user"
+  exit 1
+fi
 
-echo "[1] MGN 전용 IAM 사용자 생성 중..."
+IAM_USER_NAME="$1"
+OUTPUT_FILE="${IAM_USER_NAME}-credentials.txt"
+
+echo "[1] MGN 전용 IAM 사용자 [$IAM_USER_NAME] 생성 중..."
 aws iam create-user --user-name "$IAM_USER_NAME" || echo "[INFO] 사용자 이미 존재"
 
 echo "[2] 권한 정책 연결 중..."
