@@ -41,26 +41,39 @@ CloudShell에서의 초기 세팅부터 리눅스 서버에서의 agent 설치, 
 ```bash
 cd cloudshell
 
+# 사용자 정의 값 설정
+IAM_USER="mgn-rocky-user"
+KEY_NAME="mgn-key"
+STACK_NAME="mgn-setup-stack"
+
 # IAM 사용자 및 키 발급
 chmod +x create_iam_user_with_keys.sh
-./create_iam_user_with_keys.sh mgn-rocky-user
+./create_iam_user_with_keys.sh "$IAM_USER"
 
 # 키페어 생성
 chmod +x create_key.sh
-./create_key.sh mgn-key
+./create_key.sh "$KEY_NAME"
 
 # CloudFormation 스택 생성
 chmod +x create_stack.sh
-./create_stack.sh mgn-setup-stack
+./create_stack.sh "$STACK_NAME"
+
+# 키 발급 및 저장
+aws iam create-access-key --user-name "$IAM_USER" \
+  | jq -r '.AccessKey | "aws_access_key_id=\\(.AccessKeyId)\\naws_secret_access_key=\\(.SecretAccessKey)"' \
+  > mgn-access-keys.txt
+
+cat mgn-access-keys.txt
+
 ```
 
-발급된 키를 복사해두세요: `mgn-access-keys.txt`
 
 ---
 
 ## 🔐 Rocky Linux 서버에 AWS 자격 증명 설정
 
 ```bash
+cat mgn-access-keys.txt
 mkdir -p ~/.aws
 
 # credentials
