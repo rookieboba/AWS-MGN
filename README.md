@@ -77,23 +77,20 @@ chmod +x create_stack.sh
 aws cloudformation describe-stack-resources --stack-name $stack --output table
 # aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --output table
 
-# 4. IAM 사용자 출력
+# 4. IAM 사용자 생성 및 출력
 alias username="mgn-rocky-user"
 
 username="mgn-rocky-user"     
 ./create_iam_user_with_keys.sh "$username"
-
-# 5. Migration 시작
-sudo wget -O ./aws-replication-installer-init https://aws-application-migration-service-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/linux/aws-replication-installer-init
-chmod +x aws-replication-installer-init
-./aws-replication-installer-init --region "$AWS_REGION" --no-prompt
 ```
 
 
-## ☁️ CloudShell 작업 흐름
+## ☁️ Migration 작업 흐름
 
 ```bash
-fsf
+sudo wget -O ./aws-replication-installer-init https://aws-application-migration-service-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/linux/aws-replication-installer-init
+chmod +x aws-replication-installer-init
+./aws-replication-installer-init --region "$AWS_REGION" --no-prompt
 ---
 
 ## 🧹 리소스 삭제 명령어
