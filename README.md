@@ -123,13 +123,6 @@ chmod +x mgn_migration_flow.sh
 aws mgn describe-source-servers --region ap-northeast-2 --output table
 ```
 
----
-
-## 📝 커밋 메시지 가이드
-
-```bash
-feat(mgn): add full migration automation flow using CLI
-```
 
 ---
 
