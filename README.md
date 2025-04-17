@@ -14,12 +14,12 @@ chmod +x create_stack.sh create_key.sh create_iam_user_with_keys.sh
 
 # 3. 키페어 생성
 ```bash
-./create_key.sh
+./create_key.sh mgn-key
 ```
 
 # 4. CloudFormation 스택 생성 (IAM Role, VPC, Subnet, SG 포함)
 ```bash
-./create_stack.sh
+./create_stack.sh mgn-setup-stack
 ```
 
 
