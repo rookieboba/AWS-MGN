@@ -1,54 +1,64 @@
 
-# AWS MGN 마이그레이션 자동화 스크립트
+# AWS MGN 완전 자동화 마이그레이션 프로젝트
 
-이 프로젝트는 **Rocky Linux 8.10 서버를 AWS로 마이그레이션**하기 위한 AWS MGN(Application Migration Service) 기반 자동화 스크립트를 제공합니다.  
-CloudShell에서의 리소스 구성부터, 실제 서버에서 복제 → 테스트 → 운영 전환까지의 전체 흐름을 CLI 기반으로 제어할 수 있습니다.
+이 프로젝트는 **Rocky Linux 8.10 서버를 AWS로 마이그레이션**하기 위한 AWS MGN (Application Migration Service) 기반 **완전 자동화 스크립트**를 제공합니다.  
+CloudShell에서의 초기 세팅부터 리눅스 서버에서의 agent 설치, 복제 시작, 테스트 인스턴스, 운영 전환, 마이그레이션 확정, 서비스 연결 해제까지 **모든 과정을 CLI 한 줄로 실행**할 수 있습니다.
 
 ---
 
-## 📦 디렉토리 구조
+## 📁 디렉토리 구조
 
 ```
 .
-├── mgn_migration_flow.sh         # 전체 마이그레이션 자동화 스크립트
-└── cloudshell/
-    ├── create_key.sh             # EC2 키페어 생성
-    ├── create_stack.sh           # CloudFormation 스택 생성
-    ├── create_iam_user_with_keys.sh
-    ├── delete_iam_access_keys.sh
-    ├── delete_iam_user.sh
-    ├── delete_key.sh
-    ├── delete_stack.sh
-    ├── mgn_setup.yaml            # 초기 CloudFormation 템플릿
-    └── mgn_setup_updated.yaml    # 업데이트된 템플릿
+├── mgn_migration_flow.sh         # 💡 완전 자동화 스크립트 (agent 설치 포함)
+├── cloudshell/                   # CloudShell 내 초기 구성용
+│   ├── create_key.sh             # EC2 키페어 생성
+│   ├── create_stack.sh           # CloudFormation 스택 생성
+│   ├── create_iam_user_with_keys.sh
+│   ├── delete_iam_access_keys.sh
+│   ├── delete_iam_user.sh
+│   ├── delete_key.sh
+│   ├── delete_stack.sh
+│   ├── mgn_setup.yaml
+│   └── mgn_setup_updated.yaml
+└── cleanup/                      # 삭제 자동화 (선택)
+    └── delete_all.sh            # IAM, 키페어, 스택 일괄 삭제 스크립트 (옵션)
 ```
 
 ---
 
-## ✅ 사용 전 사전 조건
+## ✅ 요구 사항
 
-- AWS 계정 보유 및 CloudShell 사용 가능
-- `jq` 및 `awscli`가 설치된 리눅스 서버 (예: VMware 기반 Rocky Linux)
-- IAM 사용자 권한 (AdministratorAccess 또는 MGN 관련 최소 권한)
+- AWS 계정 및 CloudShell 접근 권한
+- VMware 또는 기타 환경의 **Rocky Linux 8.10 서버 (인터넷 연결 필수)**
+- 해당 서버에 `awscli`, `jq`, `curl` 설치됨
+- IAM 사용자 권한: AdministratorAccess 또는 MGN 관련 최소 권한
 
 ---
 
-## ☁️ CloudShell에서 초기 세팅
+## ☁️ CloudShell 초기 작업 (최초 1회)
 
 ```bash
-# IAM 사용자 생성 및 권한 부여
-aws iam create-user --user-name mgn-rocky-user
-aws iam attach-user-policy --user-name mgn-rocky-user \
-  --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
+cd cloudshell
 
-# 액세스 키 생성 및 저장
-aws iam create-access-key --user-name mgn-rocky-user \
-  | jq -r '.AccessKey | "AWS_ACCESS_KEY_ID=\(.AccessKeyId)\nAWS_SECRET_ACCESS_KEY=\(.SecretAccessKey)"' > mgn-access-keys.txt
+# IAM 사용자 및 키 발급
+chmod +x create_iam_user_with_keys.sh
+./create_iam_user_with_keys.sh mgn-rocky-user
+
+# 키페어 생성
+chmod +x create_key.sh
+./create_key.sh mgn-key
+
+# CloudFormation 스택 생성
+chmod +x create_stack.sh
+./create_stack.sh mgn-setup-stack
 ```
+
+발급된 키를 복사해두세요: `mgn-access-keys.txt`
 
 ---
 
-## 🔐 Putty or 리눅스 서버에서 환경 변수 등록
+## 🔐 Rocky Linux 서버에 AWS 자격 증명 설정
 
 ```bash
 mkdir -p ~/.aws
@@ -70,62 +80,47 @@ EOF
 
 ---
 
-## 🧰 CloudFormation 스택 + 키페어 생성
-
-```bash
-cd cloudshell
-
-# 키페어 생성
-chmod +x create_key.sh
-./create_key.sh mgn-key
-
-# CloudFormation 스택 생성
-chmod +x create_stack.sh
-./create_stack.sh mgn-setup-stack
-```
-
----
-
-## 🚀 마이그레이션 전체 자동화 실행
-
-`mgn_migration_flow.sh`는 소스 서버 등록 후 복제 → 테스트 인스턴스 → 커버 인스턴스 → 커버 확정 → 서비스 연결 해제까지 전체 과정을 자동화합니다.
-
-### 사용법
+## 🚀 전체 마이그레이션 자동화 실행
 
 ```bash
 chmod +x mgn_migration_flow.sh
-./mgn_migration_flow.sh <region> <source_server_id>
+./mgn_migration_flow.sh ap-northeast-2
 ```
 
-예시:
+이 스크립트는 다음을 자동으로 수행합니다:
 
-```bash
-./mgn_migration_flow.sh ap-northeast-2 s-0123456789abcdef0
-```
+1. MGN Agent 다운로드 및 설치
+2. 소스 서버 등록 확인 (최대 5분 폴링)
+3. 복제 시작 (`start-replication`)
+4. 테스트 인스턴스 실행 (`launch-test-instance`)
+5. 운영 인스턴스 실행 (`launch-cutover-instance`)
+6. 마이그레이션 확정 (`finalize-cutover`)
+7. 서비스 연결 해제 (`disconnect-from-service`)
 
 ---
 
-## 📌 주요 단계 요약
-
-| 단계 | 설명 |
-|------|------|
-| `start-replication` | 소스 서버 복제 시작 |
-| `launch-test-instance` | 테스트 인스턴스 실행 |
-| `launch-cutover-instance` | 운영 전환 인스턴스 실행 |
-| `finalize-cutover` | 마이그레이션 확정 |
-| `disconnect-from-service` | MGN 연결 해제 및 종료 |
-
----
-
-## 🧪 테스트 및 검증
+## 🔍 상태 수동 확인 명령어
 
 ```bash
 aws mgn describe-source-servers --region ap-northeast-2 --output table
 ```
 
-
 ---
 
-## 👨‍💻 Author
+## 🧹 클린업 (선택)
 
-- Sungbin Park (https://github.com/rookieboba)
+```bash
+cd cloudshell
+
+# IAM 사용자 및 키 삭제
+./delete_iam_access_keys.sh mgn-rocky-user
+./delete_iam_user.sh mgn-rocky-user
+
+# 키페어 및 스택 삭제
+./delete_key.sh mgn-key
+./delete_stack.sh mgn-setup-stack
+```
+
+또는 `cleanup/delete_all.sh`로 일괄 제거
+
+---
