@@ -16,7 +16,7 @@
 [1단계] CloudShell / IAM 사용자 생성 및 액세스 키 발급
 ```bash
 # CloudShell
-alias mgnuser='mgn-rocky-user'
+mgnuser='mgn-rocky-user'
 aws iam list-access-keys --user-name $mgnuser --output table
 aws iam create-user --user-name $mgnuser
 aws iam create-access-key --user-name  $mgnuser \
