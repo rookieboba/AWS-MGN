@@ -57,6 +57,8 @@ chmod +x aws-replication-installer-init
 ./aws-replication-installer-init --region "$AWS_REGION" --no-prompt
 ```
 
+AWS Application Migration Service 확인
+
 ---
 
 ## 🧹 리소스 삭제 명령어
