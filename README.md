@@ -74,7 +74,7 @@ stack="mgn-setup-stack"
 
 chmod +x create_stack.sh
 ./create_stack.sh $stack
-aws cloudformation describe-stack-resources --stack-name mgn-setup-stack --output table
+aws cloudformation describe-stack-resources --stack-name $stack --output table
 # aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --output table
 
 # 4. IAM 사용자 출력
