@@ -40,13 +40,22 @@ aws ec2 describe-key-pairs
 chmod +x create_stack.sh
 ./create_stack.sh mgn-setup-stack
 aws cloudformation list-stacks
+aws cloudformation describe-stack-resources --stack-name mgn-setup-stack  --query "StackResources[*].{Type:ResourceType,LogicalId:LogicalResourceId,Status:ResourceStatus}"   --output table
+
+# aws cloudformation describe-stack-resources --stack-name <스택이름> \
+  --query "StackResources[*].{Type:ResourceType,LogicalId:LogicalResourceId,Status:ResourceStatus}" \
+  --output table
 # aws cloudformation list-stacks --stack-name mgn-setup-stack
+# aws cloudformation describe-stacks --stack-name mgn-setup-stack --query "Stacks[0].StackStatus" --output text
 ```
 
 ### 4. MGN용 IAM 사용자 생성 및 AccessKey 출력
 ```bash
 chmod +x create_iam_user_with_keys.sh
 ./create_iam_user_with_keys.sh mgn-rocky-user
+
+# aws iam get-user --user-name mgn-rocky-user
+# aws iam list-access-keys --user-name mgn-rocky-user
 ```
 
 ---
