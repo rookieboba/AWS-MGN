@@ -66,14 +66,14 @@ cd AWS-MGN/cloudshell
 alias key-pair-name="mgn-key"
 
 chmod +x create_key.sh
-./create_key.sh $key-pair-name
+./create_key.sh "$key-pair-name"
 aws ec2 describe-key-pairs --output table
 
 # 3. CloudFormation 스택 생성
 alias stack="mgn-setup-stack"
 
 chmod +x create_stack.sh
-./create_stack.sh $stack
+./create_stack.sh "$stack"
 aws cloudformation describe-stack-resources --stack-name $stack --output table
 # aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --output table
 
@@ -81,7 +81,7 @@ aws cloudformation describe-stack-resources --stack-name $stack --output table
 alias username="mgn-rocky-user"
 
 chmod +x create_iam_user_with_keys.sh
-./create_iam_user_with_keys.sh ${username}
+./create_iam_user_with_keys.sh "${username}"
 
 # 5. Migration 시작
 sudo wget -O ./aws-replication-installer-init https://aws-application-migration-service-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/linux/aws-replication-installer-init
