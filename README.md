@@ -22,14 +22,20 @@ cd AWS-MGN/cloudshell
 # 2. 키페어 생성
 chmod +x create_key.sh
 ./create_key.sh mgn-key
+aws ec2 describe-key-pairs --output table
 
 # 3. CloudFormation 스택 생성
 chmod +x create_stack.sh
 ./create_stack.sh mgn-setup-stack
+aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --output table
 
-# 4. IAM 사용자 생성 및 AccessKey 출력
+# 4. IAM 사용자 출력
 chmod +x create_iam_user.sh
 ./create_iam_user.sh mgn-rocky-user
+aws iam list-users --output table
+
+# 5. Access Key 조회 명령어
+aws iam list-access-keys --user-name <사용자이름> --output table
 ```
 
 ---
