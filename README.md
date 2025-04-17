@@ -15,10 +15,21 @@
 
 [1단계] CloudShell / IAM 사용자 생성 및 액세스 키 발급
 ```bash
-# CloudShell
+# Alias 설정
 mgnuser='mgn-rocky-user'
+
+# 사용자(mgn-rocky-user)의 액세스 키 목록을 확인
 aws iam list-access-keys --user-name $mgnuser --output table
+
+# IAM 사용자를 생성
 aws iam create-user --user-name $mgnuser
+
+# IAM 사용자에게 AdministratorAccess 정책을 연결
+aws iam attach-user-policy \
+  --user-name mgn-rocky-user \
+  --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
+
+# 사용자에 대한 새로운 액세스 키와 시크릿 키를 생성
 aws iam create-access-key --user-name  $mgnuser \
   | jq -r '.AccessKey | "AWS_ACCESS_KEY_ID=\(.AccessKeyId)\nAWS_SECRET_ACCESS_KEY=\(.SecretAccessKey)"' \
   > mgn-access-keys.txt
