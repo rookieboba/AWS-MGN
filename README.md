@@ -26,19 +26,19 @@ aws ec2 describe-key-pairs --output table
 
 # 3. CloudFormation 스택 생성
 chmod +x create_stack.sh
-./create_stack.sh mgn-setup-stack
+./create_stack.sh {stack-name}
+# ./create_stack.sh mgn-setup-stack
 aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --output table
 
 # 4. IAM 사용자 출력
-chmod +x create_iam_user.sh
-./create_iam_user.sh mgn-rocky-user
-aws iam list-users --output table
+chmod +x create_iam_user_with_keys.sh
+./create_iam_user_with_keys.sh {user-name}
+#./create_iam_user_with_keys.sh mgn-rocky-user
 
-# 5. Access Key 조회 명령어
-aws iam list-access-keys --user-name <사용자이름> --output table
-
-# 6. Key 발급
-aws iam create-access-key --user-name mgn-rocky-user > key.txt
+# 5. Key 조회
+cat *-credentials.txt
+#export AWS_ACCESS_KEY_ID=\(.AccessKey.AccessKeyId)
+#export AWS_SECRET_ACCESS_KEY=\(.AccessKey.SecretAccessKey)
 ```
 
 ---
@@ -46,7 +46,7 @@ aws iam create-access-key --user-name mgn-rocky-user > key.txt
 ## 🖥️ Rocky Linux에서 수행할 작업
 
 ```bash
-# 1. 환경 변수 등록 (key.txt 확인. CloudShell에서 발급받은 값 사용)
+# 1. 환경 변수 등록 (*-credentials.txt 확인. CloudShell에서 발급받은 값 사용)
 export AWS_ACCESS_KEY_ID=AKIAxxxxxxxxxxxx
 export AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxx
 export AWS_REGION=ap-northeast-2
