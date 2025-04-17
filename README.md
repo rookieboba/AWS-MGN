@@ -28,11 +28,21 @@ cat mgn-access-keys.txt
 [2단계] Putty / 환경 변수 등록 (Access Key + Secret Key + Region)
 ```bash
 # 가상 서버에서 아래 작업 진행
-vi ~./.bashrc
-AWS_ACCESS_KEY_ID=AKIAX5OFM533AULPsfasfasgasgasgasgasgaWLPD
-AWS_SECRET_ACCESS_KEY=RZanEH4sfsfBX1eATsmGOw9+yrPR9400q00aO17MApCM
-export AWS_REGION=ap-northeast-2
-source ~/.bashrc
+mkdir -p ~/.aws
+
+# credentials 파일 설정
+cat <<EOF > ~/.aws/credentials
+[default]
+aws_access_key_id = aaaaaaaaa
+aws_secret_access_key = aaaa
+EOF
+
+# config 파일 설정
+cat <<EOF > ~/.aws/config
+[default]
+region = ap-northeast-2
+output = json
+EOF
 ```
 
 [3단계] AWS 스택 생성 
