@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: MGN 환경 구성을 위한 기본 리소스 설정 (완전한 네트워크 및 보안 설정 포함)
+Description: Base infrastructure setup for AWS MGN environment (includes full networking and security configuration)
 
 Parameters:
   KeyName:
     Type: String
-    Description: EC2 인스턴스에 사용할 키페어 이름
+    Description: Name of the key pair to use for EC2 instances
 
 Resources:
   VPC:
@@ -58,7 +58,7 @@ Resources:
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: MGN용 Security Group (SSH 및 복제 트래픽 허용)
+      GroupDescription: Security group for MGN (allows SSH and replication traffic)
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
