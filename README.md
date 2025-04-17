@@ -70,7 +70,19 @@ cat mgn-access-keys.txt
 ## 🔐 Rocky Linux 서버에 AWS 자격 증명 설정
 
 ```bash
+# 패키지 설치
+sudo dnf install -y curl jq unzip
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+aws --version
+
+# 저장한 Key 조회
 cat mgn-access-keys.txt
+
+# Key 등록
 mkdir -p ~/.aws
 
 # credentials
