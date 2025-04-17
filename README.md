@@ -13,7 +13,7 @@ AWS-MGN/
 │   ├── create_stack.sh
 │   ├── create_iam_user_with_keys.sh
 │   └── mgn_setup.yaml
-├── rocky/               # Rocky Linux 서버에서 실행할 스크립트 (예: MGN Agent 설치)
+├── rocky/               # MGN Agent 설치
 │   └── install_mgn_agent.sh
 └── README.md            # 현재 파일
 ```
@@ -48,20 +48,34 @@ chmod +x create_iam_user_with_keys.sh
 
 ---
 
+
 ## 🖥️ Rocky Linux 서버에서 수행할 작업
 
-### 1. 설치 스크립트 다운로드 및 실행
-> 설치 스크립트는 CloudShell에서 출력된 `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`을 사용합니다.
+### 1. AWS 인증 정보 설정
+> CloudShell에서 발급받은 값을 기반으로, Rocky 서버에 환경 변수 등록:
 
 ```bash
-curl -O https://your-bucket-url/install_mgn_agent.sh
-chmod +x install_mgn_agent.sh
-./install_mgn_agent.sh
+export AWS_ACCESS_KEY_ID=발급받은_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY=발급받은_SECRET_ACCESS_KEY
+export AWS_REGION=ap-northeast-2
 ```
 
 ---
 
-## 🧹 리소스 삭제 (정리할 때)
+### 2. 스크립트 다운로드 및 실행
+> CloudShell에서 발급받은 값을 기반으로, Rocky 서버에 환경 변수 등록:
+
+```bash
+git clone https://github.com/rookieboba/AWS-MGN.git
+cd AWS-MGN/rocky
+chmod +x install_mgn_agent.sh
+./install_mgn_agent.sh
+
+```
+
+## 🔗 참고
+
+## 리소스 삭제
 
 ```bash
 # CloudFormation 스택 삭제
@@ -71,9 +85,4 @@ aws cloudformation delete-stack --stack-name mgn-setup-stack
 aws ec2 delete-key-pair --key-name mgn-key
 ```
 
----
-
-## 🔗 참고
-
-- Rocky Linux용 MGN 설치 스크립트는 `rocky/` 디렉토리 참고
 
