@@ -21,7 +21,8 @@ cd AWS-MGN/cloudshell
 
 # 2. 키페어 생성
 chmod +x create_key.sh
-./create_key.sh mgn-key
+./create_key.sh {key-pair-name}
+# ./create_key.sh mgn-key
 aws ec2 describe-key-pairs --output table
 
 # 3. CloudFormation 스택 생성
