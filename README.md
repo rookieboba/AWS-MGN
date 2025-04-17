@@ -17,7 +17,7 @@ AWS CloudShell 환경에서 **Application Migration Service(MGN)** 관련 리소
 
 ```bash
 git clone https://github.com/rookieboba/AWS-MGN.git
-cd AWS-MGN
+cd AWS-MGN/cloudshell
 ```
 
 ---
