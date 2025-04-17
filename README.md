@@ -41,10 +41,7 @@ CloudShell에서의 초기 세팅부터 리눅스 서버에서의 agent 설치, 
 ```bash
 cd cloudshell
 
-# 사용자 정의 값 설정
-IAM_USER="mgn-rocky-user"
-KEY_NAME="mgn-key"
-STACK_NAME="mgn-setup-stack"
+# .env 에 사용자 설정
 
 # IAM 사용자 및 키 발급
 chmod +x create_iam_user_with_keys.sh
