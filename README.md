@@ -63,22 +63,25 @@ git clone https://github.com/rookieboba/AWS-MGN.git
 cd AWS-MGN/cloudshell
 
 # 2. 키페어 생성
+key-pair-name="mgn-key"
+
 chmod +x create_key.sh
 ./create_key.sh {key-pair-name}
-# ./create_key.sh mgn-key
 aws ec2 describe-key-pairs --output table
 
 # 3. CloudFormation 스택 생성
+stack="mgn-setup-stack"
+
 chmod +x create_stack.sh
-./create_stack.sh {stack-name}
-# ./create_stack.sh mgn-setup-stack
+./create_stack.sh {stack}
 aws cloudformation describe-stack-resources --stack-name mgn-setup-stack --output table
 # aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --output table
 
 # 4. IAM 사용자 출력
+user-name = "mgn-rocky-user"
+
 chmod +x create_iam_user_with_keys.sh
 ./create_iam_user_with_keys.sh {user-name}
-#./create_iam_user_with_keys.sh mgn-rocky-user
 
 # 5. Migration 시작
 sudo wget -O ./aws-replication-installer-init https://aws-application-migration-service-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/linux/aws-replication-installer-init
