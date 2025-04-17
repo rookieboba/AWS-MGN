@@ -12,7 +12,7 @@ STACK_NAME="$1"
 echo "[1] CloudFormation 스택 [$STACK_NAME] 생성 시작..."
 aws cloudformation create-stack \
     --stack-name "$STACK_NAME" \
-    --template-body file://mgn_setup.yaml \
+    --template-body file://mgn_setup_updated.yaml \
     --parameters ParameterKey=KeyName,ParameterValue=mgn-key \
     --capabilities CAPABILITY_NAMED_IAM
 
