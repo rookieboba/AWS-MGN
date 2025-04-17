@@ -36,6 +36,9 @@ aws iam list-users --output table
 
 # 5. Access Key 조회 명령어
 aws iam list-access-keys --user-name <사용자이름> --output table
+
+# 6. Key 발급
+aws iam create-access-key --user-name mgn-rocky-user > key.txt
 ```
 
 ---
@@ -43,7 +46,7 @@ aws iam list-access-keys --user-name <사용자이름> --output table
 ## 🖥️ Rocky Linux에서 수행할 작업
 
 ```bash
-# 1. 환경 변수 등록 (CloudShell에서 발급받은 값 사용)
+# 1. 환경 변수 등록 (key.txt 확인. CloudShell에서 발급받은 값 사용)
 export AWS_ACCESS_KEY_ID=AKIAxxxxxxxxxxxx
 export AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxx
 export AWS_REGION=ap-northeast-2
