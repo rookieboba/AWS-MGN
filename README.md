@@ -88,10 +88,21 @@ username="mgn-rocky-user"
 ## ☁️ Migration 작업 흐름
 
 ```bash
+#1 Migration 시작
 sudo wget -O ./aws-replication-installer-init https://aws-application-migration-service-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/linux/aws-replication-installer-init
 chmod +x aws-replication-installer-init
 ./aws-replication-installer-init --region "$AWS_REGION" --no-prompt
----
+
+#2. 소스 서버 확인 및 ID 등록
+aws mgn describe-source-servers --region "$AWS_REGION" --output table
+aws mgn describe-source-servers
+
+source_server_id=$(aws mgn describe-source-servers \
+  --region ap-northeast-2 \
+  --query "items[*].sourceServerID" \
+  --output text)
+```
+
 
 ## 🧹 리소스 삭제 명령어
 
