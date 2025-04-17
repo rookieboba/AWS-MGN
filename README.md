@@ -21,12 +21,7 @@ chmod +x create_stack.sh create_key.sh create_iam_user_with_keys.sh
 ```
 
 
-# 5. IAM 사용자 생성 + AccessKey 발급 (.env 파일 생성됨)
+# 5. IAM 사용자 생성 + AccessKey 발급 및 설정 내용 출력
 ```bash
 ./create_iam_user_with_keys.sh
-```
-
-# 6. 환경변수 로드
-```bash
-source aws_access_keys.env
 ```
