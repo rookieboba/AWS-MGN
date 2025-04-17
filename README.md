@@ -78,10 +78,10 @@ aws cloudformation describe-stack-resources --stack-name $stack --output table
 # aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --output table
 
 # 4. IAM 사용자 출력
-alias user-name = "mgn-rocky-user"
+alias username="mgn-rocky-user"
 
 chmod +x create_iam_user_with_keys.sh
-./create_iam_user_with_keys.sh $user-name
+./create_iam_user_with_keys.sh ${username}
 
 # 5. Migration 시작
 sudo wget -O ./aws-replication-installer-init https://aws-application-migration-service-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/linux/aws-replication-installer-init
