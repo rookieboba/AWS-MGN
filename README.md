@@ -63,14 +63,14 @@ git clone https://github.com/rookieboba/AWS-MGN.git
 cd AWS-MGN/cloudshell
 
 # 2. 키페어 생성
-key-pair-name="mgn-key"
+alias key-pair-name="mgn-key"
 
 chmod +x create_key.sh
 ./create_key.sh $key-pair-name
 aws ec2 describe-key-pairs --output table
 
 # 3. CloudFormation 스택 생성
-stack="mgn-setup-stack"
+alias stack="mgn-setup-stack"
 
 chmod +x create_stack.sh
 ./create_stack.sh $stack
@@ -78,7 +78,7 @@ aws cloudformation describe-stack-resources --stack-name $stack --output table
 # aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --output table
 
 # 4. IAM 사용자 출력
-user-name = "mgn-rocky-user"
+alias user-name = "mgn-rocky-user"
 
 chmod +x create_iam_user_with_keys.sh
 ./create_iam_user_with_keys.sh $user-name
