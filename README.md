@@ -43,8 +43,8 @@ aws cloudformation list-stacks
 aws cloudformation describe-stack-resources --stack-name mgn-setup-stack  --query "StackResources[*].{Type:ResourceType,LogicalId:LogicalResourceId,Status:ResourceStatus}"   --output table
 
 # aws cloudformation describe-stack-resources --stack-name <스택이름> \
-  --query "StackResources[*].{Type:ResourceType,LogicalId:LogicalResourceId,Status:ResourceStatus}" \
-  --output table
+#  --query "StackResources[*].{Type:ResourceType,LogicalId:LogicalResourceId,Status:ResourceStatus}" \
+#  --output table
 # aws cloudformation list-stacks --stack-name mgn-setup-stack
 # aws cloudformation describe-stacks --stack-name mgn-setup-stack --query "Stacks[0].StackStatus" --output text
 ```
