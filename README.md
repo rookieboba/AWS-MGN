@@ -22,12 +22,15 @@ aws iam create-user --user-name $mgnuser
 aws iam create-access-key --user-name  $mgnuser \
   | jq -r '.AccessKey | "AWS_ACCESS_KEY_ID=\(.AccessKeyId)\nAWS_SECRET_ACCESS_KEY=\(.SecretAccessKey)"' \
   > mgn-access-keys.txt
+cat mgn-access-keys.txt 
 ```
 
 [2단계] Putty / 환경 변수 등록 (Access Key + Secret Key + Region)
 ```bash
 # 가상 서버에서 아래 작업 진행
-cat mgn-access-keys.txt >> ~/.bashrc
+vi ~./.bashrc
+AWS_ACCESS_KEY_ID=AKIAX5OFM533AULPsfasfasgasgasgasgasgaWLPD
+AWS_SECRET_ACCESS_KEY=RZanEH4sfsfBX1eATsmGOw9+yrPR9400q00aO17MApCM
 export AWS_REGION=ap-northeast-2
 source ~/.bashrc
 ```
