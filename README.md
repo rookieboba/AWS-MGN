@@ -54,6 +54,8 @@ aws cloudformation describe-stack-resources --stack-name mgn-setup-stack  --quer
 chmod +x create_iam_user_with_keys.sh
 ./create_iam_user_with_keys.sh mgn-rocky-user
 
+aws iam list-access-keys --user-name mgn-rocky-user
+
 # aws iam get-user --user-name mgn-rocky-user
 # aws iam list-access-keys --user-name mgn-rocky-user
 ```
