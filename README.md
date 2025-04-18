@@ -10,6 +10,7 @@ CloudShell에서의 초기 세팅부터 리눅스 서버에서의 agent 설치, 
 
 ```
 .
+├── .env                          # env 파일
 ├── mgn_migration_flow.sh         # 💡 완전 자동화 스크립트 (agent 설치 포함)
 ├── cloudshell/                   # CloudShell 내 초기 구성용
 │   ├── create_key.sh             # EC2 키페어 생성
