@@ -126,6 +126,19 @@ chmod +x mgn_migration_flow.sh
 
 ---
 
+## 🔍 MGN 삭제 및 중지 명령어
+
+```bash
+# 소스 서버 정보 조회, state 확인하기
+aws mgn describe-source-servers --source-server-ids s-7a4d3dc2759164acb
+
+#복제 중지
+aws mgn disconnect-from-service --source-server-id s-7a4d3dc2759164acb
+
+# 소스 서버 삭제 시도
+aws mgn delete-source-server --source-server-id s-7a4d3dc2759164acb
+```
+
 ## 🔍 상태 수동 확인 명령어
 
 ```bash
